@@ -28,9 +28,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <body unresolved class="centered">
 
+    <h3>Input dropdown not input editable.</h3>
     <demo-snippet class="demo">
-      <dropdown-multiple></dropdown-multiple>
+      <template>
+        <dropdown-multiple id="test" label="Lista de Países" key="value"></dropdown-multiple>
+        <script>
+          let items=[];
+          items.push({ id: 1, value: null });
+          items.push({ id: 2, value: "Argentina" });
+          items.push({ id: 3, value: "Perú" });
+
+          let component = document.getElementById('test');
+          component.items = items;
+          component.readonly = true;
+        </script>
+      </template>
     </demo-snippet>
 
+
+    <h3>Input dropdown is input editable.</h3>
+    <demo-snippet class="demo">
+      <template>
+        <dropdown-multiple id="test2" label="Lista de Países" key="value"></dropdown-multiple>
+        <script>
+          let items2=[];
+
+          let component2 = document.getElementById('test2');
+          component2.items = items2;
+        </script>
+      </template>
+    </demo-snippet>
   </body>
 </html>
