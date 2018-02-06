@@ -1,0 +1,229 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+
+<!--
+`dropdown-plus`
+dropDown element
+
+@demo demo/index.html
+-->
+
+<dom-module id="dropdown-plus">
+  <template>
+    <style>
+      :host {
+        --dropdown-plus-focus-color: #212121;
+        --dropdown-plus-focus-color-alpha: rgba(45,45,45,0.4);
+        --dropdown-plus-font-size: 1.0em;
+        --dropdown-plus-content-font-size: calc(var(--dropdown-plus-font-size)*0.80);
+        --dropdown-plus-label-color: #4a4a4a;
+        --dropdown-plus-label-font-size: calc(var(--dropdown-plus-font-size)*0.80);
+      }
+
+      .dropdown {
+        position: relative;
+        display: flex;
+        flex-grow: 1;
+      }
+
+      .inputField {
+        @apply(--layout-flex);
+      }
+
+      .dropdown-content {
+        margin-top: 6px;
+        border-radius: 2px;
+        font-size: var(--dropdown-plus-content-font-size);
+        display: none;
+        width: calc(100%);
+        position: absolute;
+        background-color: #f9f9f9;
+        box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        overflow: auto;
+        max-height: 250px;
+      }
+
+      .dropdown-content > div:hover {
+        border-left: 1px solid var(--dropdown-plus-focus-color);
+        background-color: var(--dropdown-plus-focus-color-alpha);
+      }
+
+      .dropdown-content > div {
+        cursor: pointer;
+        padding: 8px 8px 8px 6px;
+        border-left: 1px solid transparent;
+      }
+
+      .dropdown-content[active] {
+        display: block;
+      }
+
+      input:focus {
+        border-bottom: 1px solid var(--dropdown-plus-focus-color);
+      }
+
+      input:hover {
+        border-bottom: 1px solid var(--dropdown-plus-focus-color);
+      }
+
+      .inputContainer {
+        @apply(--layout-flex);
+      }
+
+      .iconHolder {
+        @apply(--layout-horizontal);
+        @apply(--layout-flex);
+        align-items: center;
+      }
+    </style>
+    
+    <div class="dropdown">
+      <div class="inputContainer">
+        <div class="iconHolder">
+          <div class="inputField">
+            <paper-input id="input" label$="[[label]]" value="[[labelValue]]" readonly$="[[readonly]]"></paper-input>
+            <div class="dropdown-content" id="dropdown">
+              <template is="dom-repeat" items="[[items]]">
+                <div on-tap="_selectItem">[[_getValue4Key(item)]]</div>
+              </template>
+            </div>
+          </div>
+          <iron-icon icon="[[getIcon(opened)]]"></iron-icon>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'dropdown-plus',
+
+      properties: {
+        /**
+        * Valor a mostrar en el input.
+        */
+        labelValue: String,
+        /**
+        * Valor a mostrar como texto informativo
+        * del input.
+        */
+        label: String,
+        /**
+        * Valor del objeto a mostrar como item.
+        */
+        key: String,
+        /**
+        * Filtrar lista por campo del objeto (ejm: campo).
+        */
+        filterBy: String,
+        /**
+        * Abrir lista para seleccionar.
+        */
+        opened: {
+          type: Boolean,
+          value: false
+        },
+        /**
+        * Indice de la lista seleccionada.
+        */
+        selectedIndex: {
+          type: Number,
+          notify: true,
+          value: 0
+        },
+        /**
+        * Objeto seleccionado.
+        */
+        selectedItem: {
+          type: Object,
+          notify: true,
+          value: {}
+        },
+        /**
+        * Lista de objetos a mostrar en el
+        * desplegable.
+        */
+        items: {
+          type: Array,
+          notify: true,
+          value: []
+        },
+        /**
+        * Modo de lectura al input (default: false).
+        */
+        readonly: {
+          type: Boolean,
+          notify: true,
+          value: false
+        },
+        /**
+        * Lista de items originales en caso se use filtros.
+        */
+        general: Array
+      },
+      listeners: {
+        'input.focus': '_openDropdown',
+        'input.focusout': '_closeDropdown',
+        'input.keypress' : '_filterByPress',
+        'input.keydown' : '_filterByDown'
+      },
+      _getValue4Key: function(item) {
+        return item[this.key] === null ? "(SELECCIONE)" : item[this.key];
+      },
+      getIcon: function() {
+        return this.opened ?  "arrow-drop-up" : "arrow-drop-down"
+      },
+      _selectItem: function(e) {
+        e.stopPropagation();
+        this.labelValue = '';
+        this.selectedItem = e.model.item;
+        this.labelValue = this.selectedItem[this.key];
+        this.selectedIndex = e.model.index;
+      },
+      _openDropdown: function(e) {
+        this.toggleAttribute("active", true, this.$.dropdown);
+        this.opened = true;
+        if (this.filterBy !== undefined) {
+          this.items = this.general;
+        }
+      },
+      _closeDropdown: function(e) {
+        this.debounce("out", function() {
+          this._toggleDropdown();
+        }.bind(this), 200)
+      },
+      _toggleDropdown: function() {
+        this.toggleAttribute("active", false, this.$.dropdown);
+        this.opened = false;
+      },
+      _filterByPress: function(e) {
+        if (this.filterBy !== undefined) {
+          var query = this.$.input.value.concat(e.key);
+          this.items = this._filter(query);
+        }
+      },
+      _filterByDown: function(e) {
+        if (e.keyCode === 8 && this.filterBy !== undefined) {
+          var query = this.$.input.value.substring(0, this.$.input.value.length - 1);
+          this.items = this._filter(query);
+        }
+      },
+      _filter: function(query) {
+        var nuevaLista = new Array();
+        if (query === '') {
+          nuevaLista = this.general;
+        } else {
+          var field = this.filterBy === '' ? this.key : this.filterBy;
+          this.general.filter(function(objeto, index, lista) {
+            if (objeto[field] === null || objeto[field].toLowerCase().indexOf(query.toLowerCase()) > -1) {
+              nuevaLista.push(objeto);
+            }
+          });
+        }
+        return nuevaLista;
+      }
+    });
+  </script>
+</dom-module>
