@@ -4,25 +4,25 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>dropdown-plus test</title>
+    <title>dropdown-multiple test</title>
 
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
-    <link rel="import" href="../dropdown-plus.html">
+    <link rel="import" href="../dropdown-multiple.html">
   </head>
   <body>
     <test-fixture id="basic">
       <template>
-        <dropdown-plus></dropdown-plus>
+        <dropdown-multiple></dropdown-multiple>
       </template>
     </test-fixture>
 
     <script>
-      suite('dropdown-plus', function() {
+      suite('dropdown-multiple', function() {
         test('instantiating the element works', function() {
           var element = fixture('basic');
-          assert.equal(element.is, 'dropdown-plus');
+          assert.equal(element.is, 'dropdown-multiple');
         });
       });
     </script>

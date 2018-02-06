@@ -3,22 +3,22 @@
 <link rel="import" href="../iron-icons/iron-icons.html">
 
 <!--
-`dropdown-plus`
+`dropdown-multiple`
 dropDown element
 
 @demo demo/index.html
 -->
 
-<dom-module id="dropdown-plus">
+<dom-module id="dropdown-multiple">
   <template>
     <style>
       :host {
-        --dropdown-plus-focus-color: #212121;
-        --dropdown-plus-focus-color-alpha: rgba(45,45,45,0.4);
-        --dropdown-plus-font-size: 1.0em;
-        --dropdown-plus-content-font-size: calc(var(--dropdown-plus-font-size)*0.80);
-        --dropdown-plus-label-color: #4a4a4a;
-        --dropdown-plus-label-font-size: calc(var(--dropdown-plus-font-size)*0.80);
+        --dropdown-multiple-focus-color: #212121;
+        --dropdown-multiple-focus-color-alpha: rgba(45,45,45,0.4);
+        --dropdown-multiple-font-size: 1.0em;
+        --dropdown-multiple-content-font-size: calc(var(--dropdown-multiple-font-size)*0.80);
+        --dropdown-multiple-label-color: #4a4a4a;
+        --dropdown-multiple-label-font-size: calc(var(--dropdown-multiple-font-size)*0.80);
       }
 
       .dropdown {
@@ -34,7 +34,7 @@ dropDown element
       .dropdown-content {
         margin-top: 6px;
         border-radius: 2px;
-        font-size: var(--dropdown-plus-content-font-size);
+        font-size: var(--dropdown-multiple-content-font-size);
         display: none;
         width: calc(100%);
         position: absolute;
@@ -46,8 +46,8 @@ dropDown element
       }
 
       .dropdown-content > div:hover {
-        border-left: 1px solid var(--dropdown-plus-focus-color);
-        background-color: var(--dropdown-plus-focus-color-alpha);
+        border-left: 1px solid var(--dropdown-multiple-focus-color);
+        background-color: var(--dropdown-multiple-focus-color-alpha);
       }
 
       .dropdown-content > div {
@@ -61,11 +61,11 @@ dropDown element
       }
 
       input:focus {
-        border-bottom: 1px solid var(--dropdown-plus-focus-color);
+        border-bottom: 1px solid var(--dropdown-multiple-focus-color);
       }
 
       input:hover {
-        border-bottom: 1px solid var(--dropdown-plus-focus-color);
+        border-bottom: 1px solid var(--dropdown-multiple-focus-color);
       }
 
       .inputContainer {
@@ -97,8 +97,8 @@ dropDown element
   </template>
 
   <script>
-    Polymer({
-      is: 'dropdown-plus',
+    Polymer({7
+      is: 'dropdown-multiple',
 
       properties: {
         /**
