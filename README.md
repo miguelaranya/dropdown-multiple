@@ -11,7 +11,7 @@
 ```
 -->
 ```html
-<othdropdown-plus></dropdown-plus>
+<dropdown-plus></dropdown-plus>
 ```
 
 # \<dropdown-plus\>
